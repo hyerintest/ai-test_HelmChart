@@ -1,0 +1,65 @@
+service:
+  port:
+    name: http
+    l4_protocol: TCP
+    port: 5432
+    targetPort: 5432
+  label: postgresql-service-1-vrmbrog8lp
+  name: postgresql-service-1-vrmbrog8lp
+  selector: postgresql-service-1-vrmbrog8lp
+  type:
+  - ClusterIP
+  - NodePort
+statefulset:
+  name: postgresql-service-1-vrmbrog8lp
+  spec:
+    name: postgresql-service-1-vrmbrog8lp
+    servicename: postgresql-service-1-vrmbrog8lp
+  replicas: -@replicas@-
+  container:
+    name: postgresql-service-1-vrmbrog8lp
+    port: 5432
+  volume:
+    name: pvc-postgresql-service-1-vrmbrog8lp
+  resource:
+    request:
+      memory: -@requestMemory@-
+      cpu: -@requestCpu@-
+    limits:
+      memory: -@limitsMemory@-
+      cpu: -@limitsCpu@-
+  hpa:
+    name: hpa-postgresql-service-1-vrmbrog8lp
+    minReplicas: -@minReplicas@-
+    maxReplicas: -@maxReplicas@-
+    cpu: -@cpuAutoScale@-
+    memory: -@memAutoScale@-
+namespace: -@namespace@-
+secret:
+  name: 
+  registry:
+    name: regsecret
+    url: -@imageRepoName@-
+    username: -@accessKey@-
+    password: -@secretKey@-
+    email: info@twolinecode.com
+pvc:
+  name: pvc-postgresql-service-1-vrmbrog8lp
+  storageClass: tlc-block-sc
+  size: 5Gi
+  accessMode: ReadWriteOnce
+postgres:
+  configmap:
+    name: config-postgresql-service-1-vrmbrog8lp
+  secret:
+    name: secret-postgresql-service-1-vrmbrog8lp
+    username: test
+    password: "ROot1234!"
+    root_password: "Root1234!"
+    database: test
+    dbhost: postgresql-service-1-vrmbrog8lp
+    port: 5432
+  statefulset:
+    name: postgresql-service-1-vrmbrog8lp
+    image:
+      url: registry.turacocloud.com/turaco-common/postgresql-gis:15-3.3
